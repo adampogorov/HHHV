@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/blue"
+    android:background="#0AA0C9"
     tools:context=".MainActivity">
 
     <TextView

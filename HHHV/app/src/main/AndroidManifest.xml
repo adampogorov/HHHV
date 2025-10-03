@@ -18,7 +18,7 @@
             android:name=".RegistrationClient"
             android:exported="false" />
         <activity
-            android:name=".Client"
+            android:name=".EntranceClient"
             android:exported="false" />
         <activity
             android:name=".WorkersOrder"
@@ -27,7 +27,7 @@
             android:name=".RegistrationWorker"
             android:exported="false" />
         <activity
-            android:name=".Worker"
+            android:name=".EntranceWorker"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

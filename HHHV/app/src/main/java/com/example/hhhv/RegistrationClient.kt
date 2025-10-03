@@ -13,6 +13,7 @@ import com.example.hhhv.databinding.ActivityRegistrationClientBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class RegistrationClient : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
     private var back: Button? = null
     private var emailReg: EditText? = null
     private var passwordReg: EditText? = null
@@ -28,17 +29,18 @@ class RegistrationClient : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        auth = FirebaseAuth.getInstance()
         emailReg = binding.emailReg
         passwordReg = binding.passwordReg
         registrationButton = binding.registration
         back = binding.backReg
 
-        ButtonConf.animation(registrationButton,this,"Зарегистрироваться")
-        ButtonConf.animation(back,this,"Назад")
+        ButtonConf.animationAndDesign(registrationButton, this, "Зарегистрироваться")
+        ButtonConf.animationAndDesign(back, this, "Назад")
 
         back?.setOnClickListener {
             startActivity(
-                Intent(this, Client::class.java).apply {
+                Intent(this, EntranceClient::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                 }
             )
@@ -49,18 +51,31 @@ class RegistrationClient : AppCompatActivity() {
             if (emailText.isEmpty() || passwordText.isEmpty()) {
                 Toast.makeText(this, "Не все поля заполнены", Toast.LENGTH_SHORT).show()
             } else {
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                    emailText, passwordText
-                ).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, "Аккаунт создан!", Toast.LENGTH_SHORT).show()
+                register(emailText,passwordText)
+            }
+        }
+    }
 
-                    } else {
-                        Toast.makeText(
-                            this, "Ошибка: ${task.exception?.message}", Toast.LENGTH_LONG
-                        ).show()
+    private fun register(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(
+            email, password
+        ).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+            val user = auth.currentUser
+                user?.sendEmailVerification()
+                    ?.addOnCompleteListener { verification ->
+                        if(verification.isSuccessful) {
+                            Toast.makeText(this,"Письмо для подтверждения отправлено на ваш email $email",
+                                Toast.LENGTH_LONG).show()
+                            startActivity(Intent(this, EntranceClient::class.java))
+                            finish()
+                        }
                     }
-                }
+
+            } else {
+                Toast.makeText(
+                    this, "Ошибка: ${task.exception?.message}", Toast.LENGTH_LONG
+                ).show()
             }
         }
 

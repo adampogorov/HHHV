@@ -1,17 +1,12 @@
 package com.example.hhhv
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.widget.Button
-import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.hhhv.databinding.ActivityMainBinding
@@ -26,20 +21,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
         worker = binding.worker
         client = binding.client
-        ButtonConf.animation(worker!!,this,"Исполнитель")
-        ButtonConf.animation(client!!,this,"Клиент")
+
+        ButtonConf.animationAndDesign(worker!!,this,"Исполнитель")
+        ButtonConf.animationAndDesign(client!!,this,"Клиент")
+
         worker?.setOnClickListener {
-            move(this, Worker::class.java)
+            move(this, EntranceWorker::class.java)
         }
         client?.setOnClickListener {
-            move(this, Client::class.java)
+            move(this, EntranceClient::class.java)
         }
 
     }
